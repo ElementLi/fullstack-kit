@@ -1,29 +1,27 @@
 
-# How To Secure Nginx with Let's Encrypt on Ubuntu 14.04
+# Secure Nginx with Let's Encrypt on Ubuntu 14.04
 
-### Introduction
+### A little bit about the leading actors 
 
-Let's Encrypt is a new Certificate Authority (CA) that provides an easy way to obtain and install free TLS/SSL certificates, thereby enabling encrypted HTTPS on web servers. It simplifies the process by providing a software client, `letsencrypt`, that attempts to automate most (if not all) of the required steps. Currently, as Let's Encrypt is still in open beta, the entire process of obtaining and installing a certificate is fully automated only on Apache web servers. However, Let's Encrypt can be used to easily obtain a free SSL certificate, which can be installed manually, regardless of your choice of web server software.
+[Let's Encrypt](https://letsencrypt.org/about/) is a new Certificate Authority (CA) that provides an easy way to obtain and install free TLS/SSL certificates, thereby enabling encrypted HTTPS on web servers. It simplifies the process by providing a software client, `letsencrypt`, that attempts to automate most (if not all) of the required steps. 
 
-In this tutorial, we will show you how to use Let's Encrypt to obtain a free SSL certificate and use it with Nginx on Ubuntu 14.04\. We will also show you how to automatically renew your SSL certificate. If you're running a different web server, simply follow your web server's documentation to learn how to use the certificate with your setup.
+We will use Let's Encrypt to obtain a free SSL certificate and use it with Nginx on Ubuntu 14.04\. We will also make it automatically renew your SSL certificate. 
 
 ![Nginx with Let's Encrypt TLS/SSL Certificate and Auto-renewal](https://assets.digitalocean.com/articles/letsencrypt/nginx-letsencrypt.png)
 
-## Prerequisites
+## What we need to make this happen
 
-Before following this tutorial, you'll need a few things.
+Before get started, you'll need a few things.
 
-You should have an Ubuntu 14.04 server with a non-root user who has `sudo` privileges. You can learn how to set up such a user account by following steps 1-3 in our [initial server setup for Ubuntu 14.04 tutorial](https://www.digitalocean.com/community/articles/initial-server-setup-with-ubuntu-14-04).
+1. ave an [Ubuntu 14.04 server with a non-root user](https://www.digitalocean.com/community/articles/initial-server-setup-with-ubuntu-14-04) who has `sudo` privileges. 
 
-You must own or control the registered domain name that you wish to use the certificate with. If you do not already have a registered domain name, you may register one with one of the many domain name registrars out there (e.g. Namecheap, GoDaddy, etc.).
-
-If you haven't already, be sure to create an **A Record** that points your domain to the public IP address of your server. This is required because of how Let's Encrypt validates that you own the domain it is issuing a certificate for. For example, if you want to obtain a certificate for `example.com`, that domain must resolve to your server for the validation process to work. Our setup will use `example.com` and `www.example.com` as the domain names, so **both DNS records are required**.
+2. Point our domain or sub-domain to the server. If you haven't already, be sure to create an **A Record** that points your domain to the public IP address of your server. This is required because of how Let's Encrypt validates that you own the domain it is issuing a certificate for. For example, if you want to obtain a certificate for `example.com`, that domain must resolve to your server for the validation process to work. Our setup will use `example.com` and `www.example.com` as the domain names, so **both DNS records are required**.
 
 Once you have all of the prerequisites out of the way, let's move on to installing the Let's Encrypt client software.
 
 ## Step 1 — Install Let's Encrypt Client
 
-The first step to using Let's Encrypt to obtain an SSL certificate is to install the `letsencrypt` software on your server. Currently, the best way to install Let's Encrypt is to simply clone it from the official GitHub repository. In the future, it will likely be available via a package manager.
+The first step to using Let's Encrypt(It had renamed to CertBot in May, 2016) to obtain an SSL certificate is to install the `letsencrypt` software on your server. Currently, the best way to install Let's Encrypt is to simply clone it from the official GitHub repository. In the future, it will likely be available via a package manager.
 
 ### Install Git and bc
 
@@ -58,9 +56,9 @@ You should now have a copy of the `letsencrypt` repository in the `/opt/letsencr
 
 ## Step 2 — Obtain a Certificate
 
-Let's Encrypt provides a variety of ways to obtain SSL certificates, through various plugins. Unlike the Apache plugin, which is covered in [a different tutorial](https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-14-04), most of the plugins will only help you with obtaining a certificate which you must manually configure your web server to use. Plugins that only obtain certificates, and don't install them, are referred to as "authenticators" because they are used to authenticate whether a server should be issued a certificate.
+Let's Encrypt provides a variety of ways to obtain SSL certificates, through various plugins. Plugins that only obtain certificates, and don't install them, are referred to as "authenticators" because they are used to authenticate whether a server should be issued a certificate.
 
-We'll show you how to use the **Webroot** plugin to obtain an SSL certificate.
+We'll use the **Webroot** plugin to obtain an SSL certificate.
 
 ### How To Use the Webroot Plugin
 
@@ -334,6 +332,6 @@ sudo git pull
 
 This will download all recent changes to the repository, updating your client.
 
-## Conclusion
+## NODE set
 
 That's it! Your web server is now using a free Let's Encrypt TLS/SSL certificate to securely serve HTTPS content.
