@@ -310,7 +310,7 @@ sudo crontab -e
 Add the following lines:
 
 ```
-crontab entry30 2 * * 1 /opt/letsencrypt/letsencrypt-auto renew >> /var/log/le-renew.log
+30 2 * * 1 /opt/letsencrypt/letsencrypt-auto renew >> /var/log/le-renew.log
 35 2 * * 1 /etc/init.d/nginx reload
 
 ```
