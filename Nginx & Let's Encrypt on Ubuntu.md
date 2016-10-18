@@ -48,11 +48,11 @@ With `git` and `bc` installed, we can easily download `letsencrypt` by cloning t
 We can now clone the Let’s Encrypt repository in `/opt` with this command:
 
 ```
-sudo git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
+sudo git clone https://github.com/certbot/certbot /opt/certbot
 
 ```
 
-You should now have a copy of the `letsencrypt` repository in the `/opt/letsencrypt` directory.
+You should now have a copy of the `certbot` repository in the `/opt/certbot` directory.
 
 ## Step 2 — Obtain a Certificate
 
@@ -103,8 +103,8 @@ sudo service nginx reload
 Now that we know our `webroot-path`, we can use the Webroot plugin to request an SSL certificate with these commands. Here, we are also specifying our domain names with the `-d` option. If you want a single cert to work with multiple domain names (e.g. `example.com` and `www.example.com`), be sure to include all of them. Also, make sure that you replace the highlighted parts with the appropriate webroot path and domain name(s):
 
 ```
-cd /opt/letsencrypt
-./letsencrypt-auto certonly -a webroot --webroot-path=/usr/share/nginx/html -d example.com -d www.example.com
+cd /opt/certbot
+./certbot-auto certonly -a webroot --webroot-path=/usr/share/nginx/html -d example.com -d www.example.com
 
 ```
 
@@ -214,8 +214,8 @@ We are going to configure this server block to listen on port 443 with SSL enabl
 
         server_name example.com www.example.com;
 
-        ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+        ssl_certificate /etc/certbot/live/example.com/fullchain.pem;
+        ssl_certificate_key /etc/certbot/live/example.com/privkey.pem;
 
 ```
 
@@ -278,7 +278,7 @@ Let’s Encrypt certificates are valid for 90 days, but it’s recommended that 
 To trigger the renewal process for all installed domains, run this command:
 
 ```
-/opt/letsencrypt/letsencrypt-auto renew
+/opt/certbot/certbot-auto renew
 
 ```
 
@@ -288,10 +288,10 @@ Because we recently installed the certificate, the command will only check for t
 Output:Checking for new version...
 Requesting root privileges to run letsencrypt...
    /root/.local/share/letsencrypt/bin/letsencrypt renew
-Processing /etc/letsencrypt/renewal/example.com.conf
+Processing /etc/certbot/renewal/example.com.conf
 
 The following certs are not due for renewal yet:
-  /etc/letsencrypt/live/example.com/fullchain.pem (skipped)
+  /etc/certbot/live/example.com/fullchain.pem (skipped)
 No renewals were attempted.
 
 ```
@@ -310,22 +310,22 @@ sudo crontab -e
 Add the following lines:
 
 ```
-30 2 * * 1 /opt/letsencrypt/letsencrypt-auto renew >> /var/log/le-renew.log
+30 2 * * 1 /opt/certbot/certbot-auto renew >> /var/log/le-renew.log
 35 2 * * 1 /etc/init.d/nginx reload
 
 ```
 
-Save and exit. This will create a new cron job that will execute the `letsencrypt-auto renew` command every Monday at 2:30 am, and reload Nginx at 2:35am (so the renewed certificate will be used). The output produced by the command will be piped to a log file located at `/var/log/le-renewal.log`.
+Save and exit. This will create a new cron job that will execute the `certbot-auto renew` command every Monday at 2:30 am, and reload Nginx at 2:35am (so the renewed certificate will be used). The output produced by the command will be piped to a log file located at `/var/log/le-renewal.log`.
 
 <span class="note">For more information on how to create and schedule cron jobs, you can check our [How to Use Cron to Automate Tasks in a VPS](https://www.digitalocean.com/community/tutorials/how-to-use-cron-to-automate-tasks-on-a-vps) guide.
 </span>
 
 ## Step 5 — Updating the Let’s Encrypt Client (optional)
 
-Whenever new updates are available for the client, you can update your local copy by running a `git pull` from inside the Let’s Encrypt directory:
+Whenever new updates are available for the client, you can update your local copy by running a `git pull` from inside the Certbot directory:
 
 ```
-cd /opt/letsencrypt
+cd /opt/certbot
 sudo git pull
 
 ```
