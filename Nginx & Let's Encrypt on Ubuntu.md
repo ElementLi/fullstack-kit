@@ -89,6 +89,28 @@ Inside the server block, add this location block:
 
 ```
 
+Sample file:
+```
+   server {
+        listen       80;
+        server_name  something.domain.com;
+
+        location / {
+            root   /home/ubuntu/something.domain.com;
+            index  index.html index.htm;
+        }
+
+	location ~ /.well-known {
+                allow all;
+        }
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
+```
+
 You will also want look up what your document root is set to by searching for the `root` directive, as the path is required to use the Webroot plugin. If you're using the default configuration file, the root will be `/usr/share/nginx/html`.
 
 Save and exit.
